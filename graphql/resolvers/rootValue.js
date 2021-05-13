@@ -5,7 +5,7 @@ const users = [];
 const saltRounds = 12;
 
 const transformUser = (user) => {
-	return { ...user, password: null }; // use .toJSON(),
+	return { ...user.toJSON(), password: null }; // .toJSON() is identical to .toObject(),
 };
 
 module.exports = {
@@ -25,18 +25,24 @@ module.exports = {
 	},
 	createUser: async (args) => {
 		console.log(args);
-		const { username, password } = args.userInput;
+		const { email, username, password } = args.userInput;
 
-		let existingUser;
+		let existingUsername;
+		let existingEmail;
 
 		try {
-			existingUser = await User.findOne({ username: username });
+			existingUsername = await User.findOne({ username: username });
+			existingEmail = await User.findOne({ email: email });
 		} catch (err) {
 			throw new Error("Registration failed", 500);
 		}
 
-		if (existingUser) {
-			throw new Error("This email is already in use", 422);
+		if (existingUsername) {
+			throw new Error("This username is already taken", 422);
+		}
+
+		if (existingEmail) {
+			throw new Error("This email is already registered", 422);
 		}
 
 		const user = new User({
