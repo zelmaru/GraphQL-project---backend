@@ -13,7 +13,7 @@ const itemSchema = new Schema(
 		},
 		description: String, // not required
 		photos: [String], // autoconvert to small size
-		videos: [String], // set max size, mazbe autoconvert?
+		videos: [String], // set max size, maybe autoconvert?
 		price: {
 			type: Number,
 			required: true,
